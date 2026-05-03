@@ -263,52 +263,7 @@ These are planned or possible upgrades to explore next:
 
 ---
 
-## 📝 Markdown Cheatsheet
 
-> Since you asked — here's a quick reference for updating this README later.
-
-```markdown
-# H1 Heading
-## H2 Heading
-### H3 Heading
-
-**bold text**
-*italic text*
-`inline code`
-
-[Link text](https://url.com)
-![Image alt text](./path/to/image.png)
-
-- Bullet item
-- Another item
-
-1. Numbered item
-2. Another item
-
-- [ ] Unchecked task
-- [x] Checked task
-
-| Column 1 | Column 2 |
-|---|---|
-| Cell 1   | Cell 2   |
-
-> Blockquote text
-
----   ← horizontal rule
-
-​```javascript
-// fenced code block with syntax highlighting
-const x = 1;
-​```
-```
-
-**To add an update to this README:**
-- Add new libraries to the Tech Stack table
-- Check off items in the Future Possibilities list as you build them
-- Add new API endpoints to the API Reference section
-- Add screenshots to the Demo section — create a `docs/` folder and put images there
-
----
 
 ## 📄 License
 
