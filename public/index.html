@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Freezer Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0f0f13;
+      color: #e8e8e8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      padding: 2rem;
+    }
+    h1 { font-size: 20px; font-weight: 500; color: #888; letter-spacing: 0.05em; }
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+      max-width: 480px;
+    }
+    .card {
+      background: #1a1a22;
+      border: 0.5px solid #2a2a35;
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .card .label {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+    .card .value {
+      font-size: 48px;
+      font-weight: 500;
+      line-height: 1;
+    }
+    .card .unit {
+      font-size: 18px;
+      color: #666;
+      margin-left: 4px;
+    }
+    .temp .value { color: #5DCAA5; }
+    .hum  .value { color: #85B7EB; }
+    .meta {
+      font-size: 12px;
+      color: #444;
+      text-align: center;
+    }
+    .dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #3B6D11;
+      margin-right: 6px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .history {
+      width: 100%;
+      max-width: 480px;
+    }
+    .history-label {
+      font-size: 11px;
+      color: #444;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .bar-time { font-size: 11px; color: #444; min-width: 55px; }
+    .bar-track {
+      flex: 1; height: 6px;
+      background: #1a1a22;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: #1D9E75;
+      transition: width 0.4s ease;
+    }
+    .bar-val { font-size: 11px; color: #666; min-width: 36px; text-align: right; }
+  </style>
+</head>
+<body>
+
+<h1>Rajib's ESP32-Temp&Humidity Data-01 · live</h1>
+
+<div class="cards">
+  <div class="card temp">
+    <div class="label">Temperature</div>
+    <div>
+      <span class="value" id="temp">--</span>
+      <span class="unit">°C</span>
+    </div>
+  </div>
+  <div class="card hum">
+    <div class="label">Humidity</div>
+    <div>
+      <span class="value" id="hum">--</span>
+      <span class="unit">%</span>
+    </div>
+  </div>
+</div>
+
+<div class="meta">
+  <span class="dot"></span>
+  <span id="status">connecting...</span>
+</div>
+
+<div class="history">
+  <div class="history-label">temperature history</div>
+  <div id="bars"></div>
+</div>
+
+<script>
+  async function fetchData() {
+    try {
+      const res = await fetch('/api/latest');
+      const data = await res.json();
+
+      if (data.temp_c !== undefined) {
+        document.getElementById('temp').textContent = data.temp_c;
+        document.getElementById('hum').textContent  = data.humidity;
+        const t = new Date(data.received_at).toLocaleTimeString();
+        document.getElementById('status').textContent = 'last update: ' + t;
+      }
+    } catch (e) {
+      document.getElementById('status').textContent = 'connection lost';
+    }
+  }
+
+  async function fetchHistory() {
+    try {
+      const res  = await fetch('/api/history');
+      const data = await res.json();
+      const bars = document.getElementById('bars');
+      bars.innerHTML = '';
+      const max = Math.max(...data.map(d => d.temp_c));
+      const min = Math.min(...data.map(d => d.temp_c));
+      const range = max - min || 1;
+
+      data.slice(-10).reverse().forEach(d => {
+        const t    = new Date(d.received_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+        const pct  = ((d.temp_c - min) / range * 80 + 20).toFixed(1);
+        bars.innerHTML += `
+          <div class="bar-row">
+            <span class="bar-time">${t}</span>
+            <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+            <span class="bar-val">${d.temp_c}°C</span>
+          </div>`;
+      });
+    } catch(e) {}
+  }
+
+  fetchData();
+  fetchHistory();
+  setInterval(fetchData, 2000);
+  setInterval(fetchHistory, 5000);
+</script>
+</body>
+</html>
