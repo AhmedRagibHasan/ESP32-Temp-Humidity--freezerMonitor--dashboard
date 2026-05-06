@@ -40,6 +40,15 @@ app.get('/api/history', (req, res) => {
   res.json(readings);
 });
 
+//change log_1: before
+
+// app.listen(PORT, () => {
+//   console.log('Server running at http://localhost:' + PORT);
+// });
+
+//change log_1: after
+
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log('Server running at http://localhost:' + PORT);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
