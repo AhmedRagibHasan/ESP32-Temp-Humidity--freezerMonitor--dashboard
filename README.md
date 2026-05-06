@@ -10,8 +10,12 @@
 
 ## 📸 Demo
 
-> *(Add a screenshot of your dashboard here once deployed)*  
-> `![Dashboard Screenshot](./docs/dashboard.png)`
+Check Out the [Live Dashboard](https://esp32-temp-humidity-freezermonitor-dashboard-production.up.railway.app/)
+
+
+
+
+> `![Dashboard Screenshot](./docs/Proggress9.PNG)`
 
 ---
 
@@ -164,7 +168,7 @@ Open `http://localhost:3000` to see the dashboard locally.
 git init
 git add .
 git commit -m "initial commit"
-git remote add origin https://github.com/YOUR_USERNAME/freezer-dashboard.git
+git remote add origin gitrepo-url (exm https://github.com/YOUR_USERNAME/freezer-dashboard.git)
 git push -u origin main
 ```
 
