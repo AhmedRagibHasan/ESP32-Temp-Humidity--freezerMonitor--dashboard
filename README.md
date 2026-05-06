@@ -15,7 +15,7 @@ Check Out the [Live Dashboard](https://esp32-temp-humidity-freezermonitor-dashbo
 
 
 
-> `![Dashboard Screenshot](./docs/Proggress9.PNG)`
+> ![Dashboard Screenshot](./docs/Proggress9.PNG)
 
 ---
 
