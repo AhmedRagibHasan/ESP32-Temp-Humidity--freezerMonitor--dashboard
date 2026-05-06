@@ -48,7 +48,7 @@ app.get('/api/history', (req, res) => {
 
 //change log_1: after
 
-const PORT = process.env.PORT || 8080;
+// const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
